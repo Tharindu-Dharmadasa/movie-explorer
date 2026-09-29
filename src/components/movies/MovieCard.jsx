@@ -11,9 +11,17 @@ import StarIcon from "@mui/icons-material/Star";
 import { useNavigate } from "react-router-dom";
 import { posterUrl } from "../../utils/imageUrl";
 import { getYear, formatRating } from "../../utils/formatters";
+import { IconButton } from "@mui/material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useFavorites } from "../../context/FavoritesContext";
 
 export default function MovieCard({ movie }) {
   const navigate = useNavigate();
+
+  //   Favorite functionality
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const favorite = isFavorite(movie.id);
 
   return (
     <Card sx={{ height: "100%", position: "relative" }}>
@@ -50,6 +58,22 @@ export default function MovieCard({ movie }) {
           </Box>
         </CardContent>
       </CardActionArea>
+
+      {/* Favorite button */}
+      <IconButton
+        aria-label={favorite ? "remove from favorites" : "add to favorites"}
+        onClick={() => toggleFavorite(movie)}
+        sx={{
+          position: "absolute",
+          top: 8,
+          right: 8,
+          bgcolor: "rgba(0,0,0,0.55)",
+          color: favorite ? "#ff4d6d" : "#fff",
+          "&:hover": { bgcolor: "rgba(0,0,0,0.75)" },
+        }}
+      >
+        {favorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+      </IconButton>
     </Card>
   );
 }

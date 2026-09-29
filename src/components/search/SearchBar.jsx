@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TextField, InputAdornment, IconButton } from "@mui/material";
+import { InputAdornment, IconButton, OutlinedInput } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
 import useDebounce from "../../hooks/useDebounce";
@@ -16,29 +16,30 @@ export default function SearchBar() {
   }, [debounced, setQuery]);
 
   return (
-    <TextField
+    <OutlinedInput
       fullWidth
       placeholder="Search for a movie..."
       value={input}
       onChange={(e) => setInput(e.target.value)}
-      InputProps={{
-        startAdornment: (
-          <InputAdornment position="start">
-            <SearchIcon />
-          </InputAdornment>
-        ),
-        endAdornment: input && (
+      inputProps={{ "aria-label": "search movies" }}
+      startAdornment={
+        <InputAdornment position="start">
+          <SearchIcon color="action" />
+        </InputAdornment>
+      }
+      endAdornment={
+        input ? (
           <InputAdornment position="end">
             <IconButton
               aria-label="clear search"
-              onClick={() => setInput("")}
               edge="end"
+              onClick={() => setInput("")}
             >
               <ClearIcon />
             </IconButton>
           </InputAdornment>
-        ),
-      }}
+        ) : null
+      }
     />
   );
 }

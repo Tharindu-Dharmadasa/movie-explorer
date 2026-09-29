@@ -16,6 +16,9 @@ import { getYear, formatRating, formatRuntime } from "../utils/formatters";
 import ErrorMessage from "../components/common/ErrorMessage";
 import CastList from "../components/movies/CastList";
 import TrailerPlayer from "../components/movies/TrailerPlayer";
+import { useFavorites } from "../context/FavoritesContext";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 export default function MovieDetailsPage() {
   const { id } = useParams();
@@ -23,6 +26,8 @@ export default function MovieDetailsPage() {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -112,7 +117,7 @@ export default function MovieDetailsPage() {
             }}
           />
 
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 1, mt: { xs: 0, md: backdrop ? 8 : 0 } }}>
             <Typography variant="h4" fontWeight={800} gutterBottom>
               {movie.title}{" "}
               <Typography component="span" variant="h5" color="text.secondary">
@@ -149,6 +154,18 @@ export default function MovieDetailsPage() {
                 />
               ))}
             </Box>
+
+            {/* Favorite button */}
+            <Button
+              variant={isFavorite(movie.id) ? "contained" : "outlined"}
+              startIcon={
+                isFavorite(movie.id) ? <FavoriteIcon /> : <FavoriteBorderIcon />
+              }
+              onClick={() => toggleFavorite(movie)}
+              sx={{ mb: 2 }}
+            >
+              {isFavorite(movie.id) ? "In Favorites" : "Add to Favorites"}
+            </Button>
 
             <Typography variant="h6" fontWeight={700}>
               Overview
