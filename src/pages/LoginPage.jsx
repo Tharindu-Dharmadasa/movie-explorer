@@ -57,7 +57,6 @@ const shake = keyframes`
   30%, 50%, 70% { transform: translateX(-6px); }
   40%, 60% { transform: translateX(6px); }
 `;
-// Skip motion for people who prefer reduced motion.
 const noMotion = {
   "@media (prefers-reduced-motion: reduce)": { animation: "none" },
 };
@@ -186,10 +185,10 @@ export default function LoginPage() {
           color: "text.primary",
         }}
       >
-        {/* Layer 1: scrolling posters */}
+        {/*  scrolling posters */}
         <PosterWall />
 
-        {/* Layer 2: glowing floating blobs */}
+        {/*  glowing floating blobs */}
         <Box
           aria-hidden
           sx={{
@@ -223,7 +222,7 @@ export default function LoginPage() {
           }}
         />
 
-        {/* Layer 3: dark vignette so the card stays readable */}
+        {/* dark vignette so the card stays readable */}
         <Box
           aria-hidden
           sx={{
@@ -310,7 +309,7 @@ export default function LoginPage() {
             ))}
           </Box>
 
-          {/* Heading re-animates whenever the tab changes (because of `key`) */}
+          {/* Heading re-animates whenever the tab changes */}
           <Box
             key={tab}
             sx={{ animation: `${fadeUp} .4s ease both`, mb: 2.5, ...noMotion }}
@@ -442,19 +441,6 @@ export default function LoginPage() {
             sx={{ display: "block", textAlign: "center", mt: 3 }}
           >
             Demo project: accounts are stored locally in your browser.
-          </Typography>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{
-              display: "block",
-              textAlign: "center",
-              mt: 0.5,
-              opacity: 0.7,
-            }}
-          >
-            This product uses the TMDB API but is not endorsed or certified by
-            TMDB.
           </Typography>
         </Box>
       </Box>

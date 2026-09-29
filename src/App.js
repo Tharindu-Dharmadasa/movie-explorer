@@ -10,6 +10,7 @@ import HomePage from "./pages/HomePage";
 import MovieDetailsPage from "./pages/MovieDetailsPage";
 import FavoritesPage from "./pages/FavoritesPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import { useAuth } from "./context/AuthContext";
 
 // Wraps protected pages with the Navbar.
 const Protected = ({ children }) => (
@@ -19,46 +20,56 @@ const Protected = ({ children }) => (
   </ProtectedRoute>
 );
 
+// Remounts the data providers whenever the logged-in user changes,
+// so one user's favorites and search never leak into another's session.
+function UserScopedProviders({ children }) {
+  const { user } = useAuth();
+  const scope = user?.email || "guest";
+  return (
+    <FavoritesProvider key={scope}>
+      <MovieProvider key={scope}>{children}</MovieProvider>
+    </FavoritesProvider>
+  );
+}
+
 export default function App() {
   return (
     <AppThemeProvider>
       <AuthProvider>
-        <FavoritesProvider>
-          <MovieProvider>
-            <BrowserRouter
-              future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
-            >
-              <Routes>
-                <Route path="/login" element={<LoginPage />} />
-                <Route
-                  path="/"
-                  element={
-                    <Protected>
-                      <HomePage />
-                    </Protected>
-                  }
-                />
-                <Route
-                  path="/movie/:id"
-                  element={
-                    <Protected>
-                      <MovieDetailsPage />
-                    </Protected>
-                  }
-                />
-                <Route
-                  path="/favorites"
-                  element={
-                    <Protected>
-                      <FavoritesPage />
-                    </Protected>
-                  }
-                />
-                <Route path="*" element={<NotFoundPage />} />
-              </Routes>
-            </BrowserRouter>
-          </MovieProvider>
-        </FavoritesProvider>
+        <UserScopedProviders>
+          <BrowserRouter
+            future={{ v7_relativeSplatPath: true, v7_startTransition: true }}
+          >
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/"
+                element={
+                  <Protected>
+                    <HomePage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/movie/:id"
+                element={
+                  <Protected>
+                    <MovieDetailsPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/favorites"
+                element={
+                  <Protected>
+                    <FavoritesPage />
+                  </Protected>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </BrowserRouter>
+        </UserScopedProviders>
       </AuthProvider>
     </AppThemeProvider>
   );

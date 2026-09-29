@@ -9,6 +9,7 @@ import {
 } from "react";
 import { getTrending, searchMovies, discoverMovies } from "../api/movieService";
 import { getStorage, setStorage } from "../utils/storage";
+import { useAuth } from "./AuthContext";
 
 const MovieContext = createContext(null);
 
@@ -20,6 +21,9 @@ export function MovieProvider({ children }) {
   const [trending, setTrending] = useState([]);
   const [trendingLoading, setTrendingLoading] = useState(true);
   const [trendingError, setTrendingError] = useState(null);
+
+  const auth = useAuth();
+  const searchKey = `me_last_search_${auth?.user?.email || "guest"}`;
 
   const loadTrending = useCallback(async () => {
     setTrendingLoading(true);
@@ -39,7 +43,7 @@ export function MovieProvider({ children }) {
   }, [loadTrending]);
 
   /* ---------- Search + filters ---------- */
-  const [query, setQuery] = useState(() => getStorage("me_last_search", "")); // restored from localStorage
+  const [query, setQuery] = useState(() => getStorage(searchKey, "")); // restored from localStorage
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [results, setResults] = useState([]);
   const [page, setPage] = useState(0);
@@ -119,8 +123,8 @@ export function MovieProvider({ children }) {
 
   // Persist the last searched movie name.
   useEffect(() => {
-    setStorage("me_last_search", query);
-  }, [query]);
+    setStorage(searchKey, query);
+  }, [searchKey, query]);
 
   const hasMore = results.length > 0 && page < totalPages;
 

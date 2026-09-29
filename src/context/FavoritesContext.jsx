@@ -6,16 +6,20 @@ import {
   useState,
 } from "react";
 import { getStorage, setStorage } from "../utils/storage";
+import { useAuth } from "./AuthContext";
 
 const FavoritesContext = createContext(null);
 
 export function FavoritesProvider({ children }) {
-  const [favorites, setFavorites] = useState(() =>
-    getStorage("me_favorites", []),
-  );
+  const auth = useAuth(); // Get the current user from AuthContext
+
+  // Each user gets their own list, e.g. "me_favorites_sam@mail.com"
+  const storageKey = `me_favorites_${auth?.user?.email || "guest"}`;
+
+  const [favorites, setFavorites] = useState(() => getStorage(storageKey, []));
 
   // Save to localStorage whenever the list changes.
-  useEffect(() => setStorage("me_favorites", favorites), [favorites]);
+  useEffect(() => setStorage(storageKey, favorites), [storageKey, favorites]);
 
   const isFavorite = useCallback(
     (id) => favorites.some((m) => m.id === id),
