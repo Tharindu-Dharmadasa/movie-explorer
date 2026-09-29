@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AppThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
+import { MovieProvider } from "./context/MovieContext";
 import ProtectedRoute from "./components/layout/ProtectedRoute";
 import Navbar from "./components/layout/Navbar";
 import LoginPage from "./pages/LoginPage";
@@ -21,36 +22,38 @@ export default function App() {
   return (
     <AppThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route
-              path="/"
-              element={
-                <Protected>
-                  <HomePage />
-                </Protected>
-              }
-            />
-            <Route
-              path="/movie/:id"
-              element={
-                <Protected>
-                  <MovieDetailsPage />
-                </Protected>
-              }
-            />
-            <Route
-              path="/favorites"
-              element={
-                <Protected>
-                  <FavoritesPage />
-                </Protected>
-              }
-            />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
-        </BrowserRouter>
+        <MovieProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/"
+                element={
+                  <Protected>
+                    <HomePage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/movie/:id"
+                element={
+                  <Protected>
+                    <MovieDetailsPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="/favorites"
+                element={
+                  <Protected>
+                    <FavoritesPage />
+                  </Protected>
+                }
+              />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </BrowserRouter>
+        </MovieProvider>
       </AuthProvider>
     </AppThemeProvider>
   );
