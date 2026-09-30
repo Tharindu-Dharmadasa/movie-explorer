@@ -4,7 +4,7 @@ A responsive React web app for searching movies, browsing what's trending, watch
 
 |                |                                                                                             |
 | -------------- | ------------------------------------------------------------------------------------------- |
-| **Live demo**  | `<PASTE YOUR VERCEL LINK HERE>`                                                             |
+| **Live demo**  | `https://movie-explorer-production.vercel.app/`                                             |
 | **Repository** | `https://github.com/Tharindu-Dharmadasa/movie-explorer.git`                                 |
 | **Demo login** | Click **"Try demo account"** on the login page, or use `demo@movieexplorer.com` / `demo123` |
 
